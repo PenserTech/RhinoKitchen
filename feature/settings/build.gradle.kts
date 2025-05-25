@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "tech.penser.rhinokm.feature.inventory"
+    namespace = "tech.penser.rhinokm.feature.settings"
     compileSdk = 35
 
     defaultConfig {
