@@ -1,10 +1,8 @@
 package tech.penser.rhinokm.domain.navigation
 
-import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -12,16 +10,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import tech.penser.rhinokm.HomeScreen
+import tech.penser.rhinokm.feature.inventory.domain.navigation.InventoryNavHost
 import tech.penser.rhinokm.feature.inventory.presentation.InventoryScreen
 import tech.penser.rhinokm.feature.orders.presentation.OrdersScreen
 import tech.penser.rhinokm.feature.recipes.presentation.RecipesScreen
@@ -34,10 +31,11 @@ fun NavigationScaffold() {
     NavigationSuiteScaffold(
         navigationSuiteItems = {
             AppDestinations.entries.forEach {
+                val iconStyle = if (it == currentDestination) it.selectedIcon else it.icon
                 item(
                     icon = {
                         Icon(
-                            it.icon,
+                            iconStyle,
                             contentDescription = stringResource(it.contentDescription)
                         )
                     },
@@ -66,7 +64,7 @@ fun NavigationScaffold() {
                 AppDestinations.HOME -> HomeScreen()
                 AppDestinations.RECIPES -> RecipesScreen()
                 AppDestinations.ORDERS -> OrdersScreen()
-                AppDestinations.INVENTORY -> InventoryScreen()
+                AppDestinations.INVENTORY -> InventoryNavHost()
                 AppDestinations.SETTINGS -> SettingsScreen()
             }
         }

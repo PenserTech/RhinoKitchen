@@ -145,14 +145,14 @@ fun ManagementButtonsCard(
             Text("Manage")
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_small)))
             Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_small))) {
+                Button(onClick = onItemsClick, modifier = Modifier.weight(1f)) {
+                    Text("Items")
+                }
                 Button(onClick = onStorageClick, modifier = Modifier.weight(1f)) {
                     Text("Storage")
                 }
                 Button(onClick = onUnitsClick, modifier = Modifier.weight(1f)) {
                     Text("Units")
-                }
-                Button(onClick = onItemsClick, modifier = Modifier.weight(1f)) {
-                    Text("Items")
                 }
             }
         }
