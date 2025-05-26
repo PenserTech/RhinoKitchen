@@ -24,6 +24,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import tech.penser.rhinokm.feature.inventory.R
 
@@ -142,17 +143,17 @@ fun ManagementButtonsCard(
 ) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(dimensionResource(R.dimen.spacing_normal))) {
-            Text("Manage")
+            Text(stringResource(R.string.manage))
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_small)))
             Row(horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_small))) {
                 Button(onClick = onItemsClick, modifier = Modifier.weight(1f)) {
-                    Text("Items")
+                    Text(stringResource(R.string.items))
                 }
                 Button(onClick = onStorageClick, modifier = Modifier.weight(1f)) {
-                    Text("Storage")
+                    Text(stringResource(R.string.storage))
                 }
                 Button(onClick = onUnitsClick, modifier = Modifier.weight(1f)) {
-                    Text("Units")
+                    Text(stringResource(R.string.units))
                 }
             }
         }
@@ -187,6 +188,7 @@ fun ManagementButtonsCardPreview() {
     )
 }
 
+@Preview(showSystemUi = true)
 @Composable
 fun InventoryLandingScreenPreview() {
     InventoryLandingScreen(

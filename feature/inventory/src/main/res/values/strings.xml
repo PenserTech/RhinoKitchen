@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manage">Manage</string>
+    <string name="items">Items</string>
+    <string name="storage">Storage</string>
+    <string name="units">Units</string>
+</resources>
