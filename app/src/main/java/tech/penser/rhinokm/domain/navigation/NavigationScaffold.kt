@@ -1,7 +1,10 @@
 package tech.penser.rhinokm.domain.navigation
 
+import android.R
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -17,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import tech.penser.rhinokm.HomeScreen
 import tech.penser.rhinokm.feature.inventory.presentation.InventoryScreen
 import tech.penser.rhinokm.feature.orders.presentation.OrdersScreen
@@ -54,8 +58,9 @@ fun NavigationScaffold() {
     ) {
         Box(modifier = Modifier
             .fillMaxSize() // Takes up the space provided by the scaffold's content area
-            .safeDrawingPadding(), // Insets the actual content
-            contentAlignment = Alignment.Center
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .safeDrawingPadding() ,// Insets the actual content
+            contentAlignment = Alignment.Center,
         ) {
             when (currentDestination) {
                 AppDestinations.HOME -> HomeScreen()
