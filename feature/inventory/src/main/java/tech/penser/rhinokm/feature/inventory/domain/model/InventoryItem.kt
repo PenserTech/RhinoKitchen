@@ -7,5 +7,6 @@ data class InventoryItem @OptIn(ExperimentalUuidApi::class) constructor(
     val id: Uuid,
     val name: String,
     val unit: MeasurementUnit,
-    val storage: List<StorageLocation>
+    val storage: List<StorageLocation>,
+    val minimumStockLevel: Double,
 )

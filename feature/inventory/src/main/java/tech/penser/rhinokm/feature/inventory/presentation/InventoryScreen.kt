@@ -112,8 +112,8 @@ fun InProgressInventoryCard(onOpen: () -> Unit) {
         onClick = onOpen
     ) {
         Column(modifier = Modifier.padding(dimensionResource(R.dimen.spacing_normal))) {
-            Text("You have an inventory in progress.")
-            Text("Tap to continue.", style = MaterialTheme.typography.bodySmall)
+            Text(stringResource(R.string.progress))
+            Text(stringResource(R.string.tap_continue), style = MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -122,14 +122,14 @@ fun InProgressInventoryCard(onOpen: () -> Unit) {
 fun RecentInventoriesCard(onViewAll: () -> Unit) {
     Card(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(dimensionResource(R.dimen.spacing_normal))) {
-            Text("Recent Inventories")
+            Text(stringResource(R.string.recent_inventories))
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_small)))
             repeat(3) {
                 Text("Inventory #${it + 1}")
             }
             Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_small)))
             TextButton(onClick = onViewAll) {
-                Text("View All")
+                Text(stringResource(R.string.view_all))
             }
         }
     }
