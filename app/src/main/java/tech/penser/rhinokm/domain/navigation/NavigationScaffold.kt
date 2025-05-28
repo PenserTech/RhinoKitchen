@@ -1,0 +1,74 @@
+package tech.penser.rhinokm.domain.navigation
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.rememberNavController
+import tech.penser.rhinokm.HomeScreen
+import tech.penser.rhinokm.feature.inventory.domain.navigation.InventoryNavHost
+import tech.penser.rhinokm.feature.orders.presentation.OrdersScreen
+import tech.penser.rhinokm.feature.recipes.presentation.RecipesScreen
+import tech.penser.rhinokm.feature.settings.presentation.SettingsScreen
+
+@Composable
+fun NavigationScaffold() {
+    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+    val navControllerMap = AppDestinations.entries.associateWith { rememberNavController() }
+    val currentNavController = navControllerMap[currentDestination]!!
+
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            AppDestinations.entries.forEach {
+                val iconStyle = if (it == currentDestination) it.selectedIcon else it.icon
+                item(
+                    icon = {
+                        Icon(
+                            iconStyle,
+                            contentDescription = stringResource(it.contentDescription)
+                        )
+                    },
+                    label = { Text(stringResource(it.label)) },
+                    selected = it == currentDestination,
+                    onClick = { currentDestination = it }
+                )
+            }
+        },
+        navigationSuiteColors = NavigationSuiteDefaults.colors(
+            navigationBarContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            navigationBarContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            navigationRailContainerColor = MaterialTheme.colorScheme.primaryContainer,
+            navigationRailContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        ),
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary
+    ) {
+        Box(modifier = Modifier
+            .fillMaxSize() // Takes up the space provided by the scaffold's content area
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .safeDrawingPadding() ,// Insets the actual content
+            contentAlignment = Alignment.Center,
+        ) {
+            when (currentDestination) {
+                AppDestinations.HOME -> HomeScreen()
+                AppDestinations.RECIPES -> RecipesScreen(currentNavController)
+                AppDestinations.ORDERS -> OrdersScreen(currentNavController)
+                AppDestinations.INVENTORY -> InventoryNavHost(currentNavController)
+                AppDestinations.SETTINGS -> SettingsScreen()
+            }
+        }
+    }
+}

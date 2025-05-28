@@ -1,0 +1,80 @@
+@startuml Inventory Domain Model
+
+class Inventory {
+    +id: Uuid
+    +created: Instant
+    +createdBy: String
+    +items: List<InventoryItem>
+}
+
+class InventoryItem {
+    +id: Uuid
+    +name: String
+    +unit: MeasurementUnit
+    +storage: List<StorageLocation>
+    +minimumStockLevel: Double
+}
+
+class MeasurementUnit {
+    +id: Uuid
+    +name: String
+    +abbreviation: String
+}
+
+class StorageLocation {
+    +id: Uuid
+    +name: String
+}
+
+class InventoryRecord {
+    +id: Uuid
+    +created: Instant
+    +createdBy: String
+    +items: List<InventoryItemRecord>
+}
+
+class InventoryItemRecord {
+    +id: Uuid
+    +name: String
+    +unit: String
+    +storage: String
+    +quantity: Double
+    +created: Instant
+}
+
+class DraftInventoryItemRecord {
+    +inventoryItemId: Uuid
+    +inventoryItemName: String
+    +storageLocationId: Uuid
+    +storageLocationName: String
+    +quantity: Double?
+}
+
+' Relationships
+Inventory ||--o{ InventoryItem : contains
+InventoryItem ||--|| MeasurementUnit : uses
+InventoryItem ||--o{ StorageLocation : stored_in
+
+InventoryRecord ||--o{ InventoryItemRecord : contains
+
+' Draft relationships (dotted lines to show they reference but don't contain)
+DraftInventoryItemRecord ..> InventoryItem : references
+DraftInventoryItemRecord ..> StorageLocation : references
+
+note right of InventoryRecord
+    Records are "carved in stone" 
+    snapshots of inventory state
+    at a specific point in time.
+    
+    Foreign key relationships will be
+    handled at the data layer, not
+    in domain models.
+end note
+
+note right of DraftInventoryItemRecord
+    Used during inventory taking
+    process before creating final
+    InventoryItemRecord
+end note
+
+@enduml
