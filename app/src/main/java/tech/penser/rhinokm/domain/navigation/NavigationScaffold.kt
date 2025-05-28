@@ -17,9 +17,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.navigation.compose.rememberNavController
 import tech.penser.rhinokm.HomeScreen
 import tech.penser.rhinokm.feature.inventory.domain.navigation.InventoryNavHost
-import tech.penser.rhinokm.feature.inventory.presentation.InventoryScreen
 import tech.penser.rhinokm.feature.orders.presentation.OrdersScreen
 import tech.penser.rhinokm.feature.recipes.presentation.RecipesScreen
 import tech.penser.rhinokm.feature.settings.presentation.SettingsScreen
@@ -27,6 +27,8 @@ import tech.penser.rhinokm.feature.settings.presentation.SettingsScreen
 @Composable
 fun NavigationScaffold() {
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+    val navControllerMap = AppDestinations.entries.associateWith { rememberNavController() }
+    val currentNavController = navControllerMap[currentDestination]!!
 
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -62,9 +64,9 @@ fun NavigationScaffold() {
         ) {
             when (currentDestination) {
                 AppDestinations.HOME -> HomeScreen()
-                AppDestinations.RECIPES -> RecipesScreen()
-                AppDestinations.ORDERS -> OrdersScreen()
-                AppDestinations.INVENTORY -> InventoryNavHost()
+                AppDestinations.RECIPES -> RecipesScreen(currentNavController)
+                AppDestinations.ORDERS -> OrdersScreen(currentNavController)
+                AppDestinations.INVENTORY -> InventoryNavHost(currentNavController)
                 AppDestinations.SETTINGS -> SettingsScreen()
             }
         }

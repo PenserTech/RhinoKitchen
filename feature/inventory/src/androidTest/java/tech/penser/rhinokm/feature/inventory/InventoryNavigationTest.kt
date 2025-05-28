@@ -1,73 +1,72 @@
 package tech.penser.rhinokm.feature.inventory
 
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
-//import androidx.compose.ui.test.printToLog
-//import androidx.compose.ui.test.onRoot
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import tech.penser.rhinokm.feature.inventory.domain.navigation.InventoryNavHost
+import tech.penser.rhinokm.core.testutils.BaseComposeNavTest
 
+/**
+ * UI tests for the inventory navigation flow.
+ *
+ * This class tests the navigation between different screens within the inventory feature.
+ * It verifies that clicking on navigation elements correctly navigates to the intended screens
+ * and that the landing screen displays the expected elements.
+ */
 @RunWith(AndroidJUnit4::class)
-class InventoryNavigationTest {
-    
-    @get:Rule
-    val composeTestRule = createComposeRule()
+class InventoryNavigationTest: BaseComposeNavTest() {
     
     @Test
     fun inventoryNavigation_landingScreenDisplaysCorrectly() {
         composeTestRule.setContent {
-            InventoryNavHost()
+            InventoryNavHost(navController)
         }
         
         // Verify landing screen elements are displayed
-        // FAB text requires unmerged tree to be found because the text is embedded in a Text composable
-        composeTestRule.onNodeWithText("Start New Inventory", useUnmergedTree = true).assertIsDisplayed()
-        composeTestRule.onNodeWithText("Items").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Storage").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Units").assertIsDisplayed()
+        // FAB text requires unmerged tree to be found because
+        // the text is embedded in a Text composable
+        assertNodeWithTextDisplayed(text = "Start New Inventory", useUnmergedTree = true)
+        assertNodeWithTextDisplayed("Items")
+        assertNodeWithTextDisplayed("Storage")
+        assertNodeWithTextDisplayed("Units")
     }
     
     @Test
     fun inventoryNavigation_clickStorageNavigatesToStorageScreen() {
         composeTestRule.setContent {
-            InventoryNavHost()
+            InventoryNavHost(navController)
         }
         
         // Click on Storage button
-        composeTestRule.onNodeWithText("Storage").performClick()
+        clickNodeWithText("Storage")
         
         // Verify we're on the storage screen
-        composeTestRule.onNodeWithText("Mock Storage Location List Screen").assertIsDisplayed()
+        assertNodeWithTextDisplayed("Mock Storage Location List Screen")
     }
     
     @Test
     fun inventoryNavigation_clickItemsNavigatesToItemsScreen() {
         composeTestRule.setContent {
-            InventoryNavHost()
+            InventoryNavHost(navController)
         }
         
         // Click on Items button
-        composeTestRule.onNodeWithText("Items").performClick()
+        clickNodeWithText("Items")
         
         // Verify we're on the items screen
-        composeTestRule.onNodeWithText("Mock Item List Screen").assertIsDisplayed()
+        assertNodeWithTextDisplayed("Mock Item List Screen")
     }
     
     @Test
     fun inventoryNavigation_clickUnitsNavigatesToUnitsScreen() {
         composeTestRule.setContent {
-            InventoryNavHost()
+            InventoryNavHost(navController)
         }
         
         // Click on Units button
-        composeTestRule.onNodeWithText("Units").performClick()
+        clickNodeWithText("Units")
         
         // Verify we're on the units screen
-        composeTestRule.onNodeWithText("Mock Units List Screen").assertIsDisplayed()
+        assertNodeWithTextDisplayed("Mock Units List Screen")
     }
 }

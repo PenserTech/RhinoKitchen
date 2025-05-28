@@ -2,9 +2,9 @@ package tech.penser.rhinokm.feature.inventory.domain.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import tech.penser.rhinokm.feature.inventory.presentation.InventoryLandingScreen
 import tech.penser.rhinokm.feature.inventory.presentation.ItemListScreen
 import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationListScreen
@@ -12,10 +12,10 @@ import tech.penser.rhinokm.feature.inventory.presentation.UnitsListScreen
 
 @Composable
 fun InventoryNavHost(
+    navController: NavHostController,
     modifier: Modifier = Modifier,
     startDestination: String = InventoryDestination.Landing.route
 ) {
-    val navController = rememberNavController()
 
     NavHost(
         navController = navController,

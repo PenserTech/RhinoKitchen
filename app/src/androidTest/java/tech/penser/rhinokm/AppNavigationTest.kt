@@ -1,22 +1,28 @@
 package tech.penser.rhinokm
 
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import tech.penser.rhinokm.core.testutils.BaseComposeNavTest
 import tech.penser.rhinokm.domain.navigation.NavigationScaffold
 
+/**
+ * Tests the main application navigation defined in [NavigationScaffold].
+ *
+ * This class verifies:
+ *  - The application starts on the correct initial screen (Home).
+ *  - Navigation to each top-level destination works as expected.
+ *  - Switching between different top-level destinations is functional.
+ *  - Nested navigation state (e.g., within the Inventory feature) is preserved
+ *    when navigating away and returning to that feature.
+ *
+ * It extends [BaseComposeNavTest] to inherit common Compose testing setup and utility functions.
+ */
 @RunWith(AndroidJUnit4::class)
-class AppNavigationTest {
-    
-    @get:Rule
-    val composeTestRule = createComposeRule()
+class AppNavigationTest : BaseComposeNavTest() {
     
     @Test
     fun appNavigation_startsOnHomeScreen() {
@@ -24,14 +30,14 @@ class AppNavigationTest {
             NavigationScaffold()
         }
         
-        // Debug: Print what's actually displayed on start
+        // Debug: Print what's displayed on start
         composeTestRule.onRoot().printToLog("HOME_SCREEN_DEBUG")
         
         // Verify we start on the home screen
         // Home screen shows the color test surface with full color values
-        composeTestRule.onNodeWithText("Primary:", substring = true).assertIsDisplayed()
-        composeTestRule.onNodeWithText("Secondary:", substring = true).assertIsDisplayed()
-        composeTestRule.onNodeWithText("Tertiary:", substring = true).assertIsDisplayed()
+        assertNodeWithTextDisplayed("Primary:", substring = true)
+        assertNodeWithTextDisplayed("Secondary:", substring = true)
+        assertNodeWithTextDisplayed("Tertiary:", substring = true)
     }
     
     @Test
@@ -41,13 +47,16 @@ class AppNavigationTest {
         }
         
         // Click on Inventory navigation item
-        composeTestRule.onNodeWithText("Inventory").performClick()
-        
+        clickNodeWithText("Inventory")
+
         // Verify we're on the inventory landing screen
-        composeTestRule.onNodeWithText("Start New Inventory", useUnmergedTree = true).assertIsDisplayed()
-        composeTestRule.onNodeWithText("Items").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Storage").assertIsDisplayed()
-        composeTestRule.onNodeWithText("Units").assertIsDisplayed()
+        assertNodeWithTextDisplayed(
+            "Start New Inventory",
+            useUnmergedTree = true
+        )
+        assertNodeWithTextDisplayed("Items")
+        assertNodeWithTextDisplayed("Storage")
+        assertNodeWithTextDisplayed("Units")
     }
     
     @Test
@@ -57,10 +66,10 @@ class AppNavigationTest {
         }
         
         // Click on Orders navigation item
-        composeTestRule.onNodeWithText("Orders").performClick()
+        clickNodeWithText("Orders")
         
         // Verify we're on the orders screen
-        composeTestRule.onNodeWithText("Orders Screen").assertIsDisplayed()
+        assertNodeWithTextDisplayed("Orders Screen")
     }
     
     @Test
@@ -70,10 +79,10 @@ class AppNavigationTest {
         }
         
         // Click on Recipes navigation item
-        composeTestRule.onNodeWithText("Recipes").performClick()
+        clickNodeWithText("Recipes")
         
         // Verify we're on the recipes screen
-        composeTestRule.onNodeWithText("Recipes Screen").assertIsDisplayed()
+        assertNodeWithTextDisplayed("Recipes Screen")
     }
     
     @Test
@@ -83,10 +92,10 @@ class AppNavigationTest {
         }
         
         // Click on Settings navigation item
-        composeTestRule.onNodeWithText("Settings").performClick()
+        clickNodeWithText("Settings")
         
         // Verify we're on the settings screen
-        composeTestRule.onNodeWithText("Settings Screen").assertIsDisplayed()
+        assertNodeWithTextDisplayed("Settings Screen")
     }
     
     @Test
@@ -96,19 +105,19 @@ class AppNavigationTest {
         }
         
         // Start on Home, verify home content
-        composeTestRule.onNodeWithText("Primary:", substring = true).assertIsDisplayed()
+        assertNodeWithTextDisplayed("Primary:", substring = true)
         
         // Navigate to Inventory
-        composeTestRule.onNodeWithText("Inventory").performClick()
-        composeTestRule.onNodeWithText("Start New Inventory", useUnmergedTree = true).assertIsDisplayed()
+        clickNodeWithText("Inventory")
+        assertNodeWithTextDisplayed("Start New Inventory", useUnmergedTree = true)
         
         // Navigate to Orders
-        composeTestRule.onNodeWithText("Orders").performClick()
-        composeTestRule.onNodeWithText("Orders Screen").assertIsDisplayed()
+        clickNodeWithText("Orders")
+        assertNodeWithTextDisplayed("Orders Screen")
         
         // Navigate back to Home
-        composeTestRule.onNodeWithText("Home").performClick()
-        composeTestRule.onNodeWithText("Primary:", substring = true).assertIsDisplayed()
+        clickNodeWithText("Home")
+        assertNodeWithTextDisplayed("Primary:", substring = true)
     }
     
     @Test
@@ -118,28 +127,28 @@ class AppNavigationTest {
         }
         
         // Navigate to Inventory (starts on landing screen)
-        composeTestRule.onNodeWithText("Inventory").performClick()
-        composeTestRule.onNodeWithText("Start New Inventory", useUnmergedTree = true).assertIsDisplayed()
+        clickNodeWithText("Inventory")
+        assertNodeWithTextDisplayed("Start New Inventory", useUnmergedTree = true)
         
         // Navigate within inventory to Storage screen
-        composeTestRule.onNodeWithText("Storage").performClick()
+        clickNodeWithText("Storage")
         
         // Debug: Print what's displayed after clicking Storage
         composeTestRule.onRoot().printToLog("AFTER_STORAGE_CLICK")
-        
-        composeTestRule.onNodeWithText("Mock Storage Location List Screen").assertIsDisplayed()
+
+        assertNodeWithTextDisplayed("Mock Storage Location List Screen")
         
         // Leave inventory - go to Orders
-        composeTestRule.onNodeWithText("Orders").performClick()
-        composeTestRule.onNodeWithText("Orders Screen").assertIsDisplayed()
+        clickNodeWithText("Orders")
+        assertNodeWithTextDisplayed("Orders Screen")
         
         // Return to inventory - should be back on Storage screen, not landing
-        composeTestRule.onNodeWithText("Inventory").performClick()
+        clickNodeWithText("Inventory")
         
         // Debug: Print what's displayed when returning to inventory
         composeTestRule.onRoot().printToLog("RETURN_TO_INVENTORY")
-        
-        composeTestRule.onNodeWithText("Mock Storage Location List Screen").assertIsDisplayed()
+
+        assertNodeWithTextDisplayed("Mock Storage Location List Screen")
         
         // Verify we're NOT on the landing screen
         composeTestRule.onNodeWithText("Start New Inventory", useUnmergedTree = true).assertDoesNotExist()

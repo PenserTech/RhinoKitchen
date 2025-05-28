@@ -1,6 +1,5 @@
 package tech.penser.rhinokm.feature.orders.presentation
 
-import androidx.annotation.DimenRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -12,10 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
+import androidx.navigation.NavHostController
 import tech.penser.rhinokm.feature.orders.R
 
 @Composable
-fun OrdersScreen() {
+fun OrdersScreen(navController: NavHostController) {
     Column(modifier = Modifier.fillMaxSize().padding(dimensionResource(R.dimen.spacing_normal)), verticalArrangement = Arrangement.Top) {
         Text(
             text = "Orders Screen",
