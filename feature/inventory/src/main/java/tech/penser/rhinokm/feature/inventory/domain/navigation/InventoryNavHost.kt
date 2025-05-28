@@ -1,13 +1,17 @@
 package tech.penser.rhinokm.feature.inventory.domain.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import tech.penser.rhinokm.feature.inventory.R
 import tech.penser.rhinokm.feature.inventory.presentation.InventoryLandingScreen
 import tech.penser.rhinokm.feature.inventory.presentation.ItemListScreen
 import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationListScreen
+import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationViewModel
 import tech.penser.rhinokm.feature.inventory.presentation.UnitsListScreen
 
 @Composable
@@ -16,7 +20,6 @@ fun InventoryNavHost(
     modifier: Modifier = Modifier,
     startDestination: String = InventoryDestination.Landing.route
 ) {
-
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -42,10 +45,15 @@ fun InventoryNavHost(
             ItemListScreen()
         }
         composable(InventoryDestination.Storage.route) {
-            StorageLocationListScreen()
+            StorageLocationListScreen(
+                navController = navController,
+                viewModel = StorageLocationViewModel(),
+                modifier = modifier.padding(dimensionResource(R.dimen.spacing_normal))
+            )
         }
         composable(InventoryDestination.Units.route) {
             UnitsListScreen()
         }
     }
 }
+

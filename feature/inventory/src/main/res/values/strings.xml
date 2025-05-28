@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Inventory Landing Screen -->
     <string name="tap_continue">Tap to continue.</string>
     <string name="progress">You have an inventory in progress.</string>
     <string name="recent_inventories">Recent Inventories</string>
@@ -8,4 +9,22 @@
     <string name="items">Items</string>
     <string name="storage">Storage</string>
     <string name="units">Units</string>
+    <string name="start_new_inventory">Start New Inventory</string>
+    <string name="open_in_progress">Open Inventory</string>
+
+    <!--    Storage Location List Screen -->
+    <string name="storage_locations_screen_title">Storage Locations</string>
+    <string name="storage_locations_new_location_name">Location name</string>
+
+    <!-- Item List Screen -->
+    <string name="item_list_screen_title">Items</string>
+
+    <!-- Units List Screen -->
+    <string name="units_list_screen_title">Units</string>
+
+    <!--App-wide strings-->
+    <string name="app_name">Rhino KM</string>
+    <string name="app_tagline">Resource Management</string>
+    <string name="arrow_back_description">Back</string>
+
 </resources>

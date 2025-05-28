@@ -53,4 +53,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     androidTestImplementation(project(":core:test-utils"))
+    testImplementation(kotlin("test"))
 }
