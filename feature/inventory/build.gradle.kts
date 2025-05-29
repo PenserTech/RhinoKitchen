@@ -31,6 +31,12 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+//    buildFeatures {
+//        compose = true
+//    }
+//    composeOptions {
+//        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
+//    }
 }
 
 dependencies {
@@ -44,7 +50,7 @@ dependencies {
     implementation(libs.androidx.navigation)
     implementation(libs.ktx.datetime)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+//    implementation(libs.material)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.androidx.junit)
