@@ -31,12 +31,6 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-//    buildFeatures {
-//        compose = true
-//    }
-//    composeOptions {
-//        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-//    }
 }
 
 dependencies {
@@ -60,4 +54,8 @@ dependencies {
 
     androidTestImplementation(project(":core:test-utils"))
     testImplementation(kotlin("test"))
+
+//    koin DI
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
 }

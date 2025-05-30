@@ -30,4 +30,28 @@ class StorageLocationScreenTest : BaseComposeNavTest() {
 
         assertNodeWithTextDisplayed("Location name") // this  hint text for the first field we want
     }
+
+    @Test
+    fun storage_AllLocationsDisplayed_withNameAndAbbreviation() {
+        composeTestRule.setContent {
+            StorageLocationListScreen(navController = navController, viewModel = StorageLocationViewModel())
+        }
+
+    }
+
+    /**
+     * Here is a list of tests to add:
+     *
+     * allLocationsDisplayed_withNameAndAbbreviation - in progress
+     *
+     * addNewRowIsAlwaysVisible_atBottomOfList
+     *
+     * displayMode_fieldsAreNotEditable
+     *
+     * keyboardDoesNotObscureFields_inPortraitMode
+     *
+     * keyboardDoesNotObscureFields_inLandscapeMode
+     *
+     * inputInAddNewRow_survivesOrientationChange
+     */
 }

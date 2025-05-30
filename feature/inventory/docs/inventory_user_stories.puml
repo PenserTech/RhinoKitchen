@@ -1,0 +1,97 @@
+@startuml
+left to right direction
+actor User
+
+' ======================
+' Storage Location Management
+' ======================
+package "Storage Location Management" {
+  usecase "View All Storage Locations" as SL_View
+  usecase "Add New Location" as SL_Add
+  usecase "Edit Existing Location" as SL_Edit
+  usecase "Restrict Editing to One Row" as SL_SingleEdit
+  usecase "Persist Location Data" as SL_Save
+  usecase "Validate Required Fields" as SL_ValidateRequired
+  usecase "Prevent Duplicate Names" as SL_ValidateUnique
+  usecase "Enforce Field Length Limits" as SL_ValidateLength
+  usecase "Maintain Input on Orientation Change" as SL_InputPersistence
+  usecase "Keyboard Does Not Obscure Input" as SL_KeyboardVisibility
+
+  User --> SL_View
+  User --> SL_Add
+  User --> SL_Edit
+  User --> SL_SingleEdit
+  User --> SL_Save
+  User --> SL_ValidateRequired
+  User --> SL_ValidateUnique
+  User --> SL_ValidateLength
+  User --> SL_InputPersistence
+  User --> SL_KeyboardVisibility
+
+  ' --- Acceptance Criteria ---
+  ' SL_View: All existing locations are listed with name and abbreviation
+  ' SL_Add: A persistent row is available at the bottom for new input
+  ' SL_Edit: Tapping a row enters edit mode with both fields editable
+  ' SL_SingleEdit: Only one row can be edited at a time; others revert
+  ' SL_Save: New or edited locations are saved and displayed immediately
+  ' SL_ValidateRequired: Name and abbreviation fields are mandatory
+  ' SL_ValidateUnique: Duplicate names or abbreviations are rejected
+  ' SL_ValidateLength: Enforces max length constraints on fields
+  ' SL_InputPersistence: User input remains through orientation change
+  ' SL_KeyboardVisibility: Keyboard never obscures input fields (portrait/landscape)
+}
+
+' ======================
+' Measurement Unit Management
+' ======================
+package "Measurement Unit Management" {
+  usecase "View Available Units" as MU_View
+  usecase "Create New Unit" as MU_Create
+  usecase "Edit Existing Unit" as MU_Edit
+  usecase "Prevent Duplicate Units" as MU_Validate
+  usecase "Restrict Edits If In Use" as MU_Restrict
+
+  User --> MU_View
+  User --> MU_Create
+  User --> MU_Edit
+  User --> MU_Validate
+  User --> MU_Restrict
+
+  ' --- Acceptance Criteria ---
+  ' MU_View: User sees a list of all defined measurement units
+  ' MU_Create: New unit can be defined with name and abbreviation
+  ' MU_Edit: Units can be updated unless they are in use
+  ' MU_Validate: Duplicate names or abbreviations are not allowed
+  ' MU_Restrict: Units used by inventory items cannot be edited or deleted
+}
+
+' ======================
+' Inventory Item Management
+' ======================
+package "Inventory Item Management" {
+  usecase "View Items in Inventory" as II_View
+  usecase "Create New Inventory Item" as II_Create
+  usecase "Edit Inventory Item Details" as II_Edit
+  usecase "Assign Measurement Unit" as II_AssignUnit
+  usecase "Specify Allowed Storage Locations" as II_AllowedLocations
+  usecase "Prevent Duplicates" as II_Validate
+  usecase "Manage Per-Location Quantities" as II_TrackQuantities
+
+  User --> II_View
+  User --> II_Create
+  User --> II_Edit
+  User --> II_AssignUnit
+  User --> II_AllowedLocations
+  User --> II_Validate
+  User --> II_TrackQuantities
+
+  ' --- Acceptance Criteria ---
+  ' II_View: User sees a list of inventory items with name, unit, and quantity
+  ' II_Create: User can create items by specifying name, unit, and allowed storage
+  ' II_Edit: Name, unit, and allowed locations can be updated
+  ' II_AssignUnit: Each item must have a valid measurement unit assigned
+  ' II_AllowedLocations: Item can only be stored at predefined allowed locations
+  ' II_Validate: Duplicate item names are disallowed
+  ' II_TrackQuantities: Quantities per storage location can be viewed and edited
+}
+@enduml
