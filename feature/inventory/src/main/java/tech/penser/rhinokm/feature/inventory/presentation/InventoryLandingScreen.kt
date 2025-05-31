@@ -21,32 +21,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import tech.penser.rhinokm.feature.inventory.R
 
-@Composable
-fun InventoryScreen() {
-//    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
-//        Text(text = "Inventory Screen")
-//        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.spacing_large)))
-//        Text(text = "This screen should provide access to previous inventories, " +
-//                "but most importantly, it allows creating new inventories. " +
-//                "There are also screens for managing inventory items, storage locations, " +
-//                "and item measurement units.")
-//    }
-    InventoryLandingScreen(
-        onStartNewInventory = {},
-        onOpenInProgress = {},
-        onViewAllInventories = {},
-        onManageStorageLocations = {},
-        onManageUnits = {},
-        onManageInventoryItems = {}
-    )
-}
+
 
 @Composable
 fun InventoryLandingScreen(
@@ -158,12 +139,6 @@ fun ManagementButtonsCard(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun InventoryScreenPreview() {
-    InventoryScreen()
 }
 
 @Preview(showBackground = true)

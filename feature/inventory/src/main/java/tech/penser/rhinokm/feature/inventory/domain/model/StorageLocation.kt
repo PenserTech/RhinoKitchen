@@ -5,5 +5,6 @@ import kotlin.uuid.Uuid
 
 data class StorageLocation @OptIn(ExperimentalUuidApi::class) constructor(
     val id: Uuid,
-    val name: String
+    val name: String,
+    val abbreviation: String
 )

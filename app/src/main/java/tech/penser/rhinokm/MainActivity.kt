@@ -5,28 +5,22 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
 import tech.penser.rhinokm.domain.navigation.NavigationScaffold
 import tech.penser.rhinokm.ui.theme.RhinoKMTheme
 
@@ -38,48 +32,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             RhinoKMTheme(darkTheme = true) {
                 NavigationScaffold()
-//                val navController = rememberNavController()
-//                val windowSizeClass = calculateWindowSizeClass(this)
-////                val layoutType = calculateNavigationSuiteLayoutType(windowSizeClass)
-//                MainNavHost(navController = navController)
-//                Scaffold(
-//                    modifier = Modifier.fillMaxSize(),
-//                    contentColor = MaterialTheme.colorScheme.onBackground,
-//                ) { innerPadding ->
-//                    Column {
-//                        Greeting(
-//                            name = "Android",
-//                            modifier = Modifier
-//                                .padding(innerPadding)
-//                                .fillMaxWidth(),
-//                        )
-//                        ColorTestSurface()
-//                    }
-//                }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier,
-        color = MaterialTheme.colorScheme.secondary
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    RhinoKMTheme(darkTheme = true) {
-        ColorTestSurface()
-    }
-}
-
-
-//@Preview(showBackground = true)
 @Composable
 fun ColorTestSurface() {
     Surface(

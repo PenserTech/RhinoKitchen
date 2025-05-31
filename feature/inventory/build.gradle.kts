@@ -56,6 +56,8 @@ dependencies {
     testImplementation(kotlin("test"))
 
 //    koin DI
-    implementation(libs.koin.android)
+    implementation(libs.bundles.koin)
     implementation(libs.koin.androidx.compose)
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.koin.test.junit4)
 }

@@ -7,6 +7,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.koin.androidx.compose.koinViewModel
 import tech.penser.rhinokm.feature.inventory.R
 import tech.penser.rhinokm.feature.inventory.presentation.InventoryLandingScreen
 import tech.penser.rhinokm.feature.inventory.presentation.ItemListScreen
@@ -45,9 +46,10 @@ fun InventoryNavHost(
             ItemListScreen()
         }
         composable(InventoryDestination.Storage.route) {
+            val viewModel = koinViewModel<StorageLocationViewModel>()
             StorageLocationListScreen(
                 navController = navController,
-                viewModel = StorageLocationViewModel(),
+                viewModel = viewModel,
                 modifier = modifier.padding(dimensionResource(R.dimen.spacing_normal))
             )
         }

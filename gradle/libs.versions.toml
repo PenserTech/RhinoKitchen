@@ -45,6 +45,14 @@ material = { group = "com.google.android.material", name = "material", version.r
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "ktx-serialization-json" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-androidx-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-androidx-scope = { module = "io.insert-koin:koin-androidx-scope", version.ref = "koin" }
+koin-androidx-viewmodel = { module = "io.insert-koin:koin-androidx-viewmodel", version.ref = "koin" }
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koin" }
+koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koin" }
+
+[bundles]
+koin = ["koin-core", "koin-android", "koin-androidx-compose"]
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

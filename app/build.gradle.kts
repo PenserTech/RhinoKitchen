@@ -79,4 +79,10 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     androidTestImplementation(project(":core:test-utils"))
+
+    //    koin DI
+    implementation(libs.bundles.koin)
+    implementation(libs.koin.androidx.compose)
+    androidTestImplementation(libs.koin.test)
+    androidTestImplementation(libs.koin.test.junit4)
 }
