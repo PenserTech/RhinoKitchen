@@ -11,8 +11,8 @@ import org.koin.androidx.compose.koinViewModel
 import tech.penser.rhinokm.feature.inventory.R
 import tech.penser.rhinokm.feature.inventory.presentation.InventoryLandingScreen
 import tech.penser.rhinokm.feature.inventory.presentation.ItemListScreen
-import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationListScreen
-import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationViewModel
+import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationsScreen
+import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationsViewModel
 import tech.penser.rhinokm.feature.inventory.presentation.UnitsListScreen
 
 @Composable
@@ -46,8 +46,8 @@ fun InventoryNavHost(
             ItemListScreen()
         }
         composable(InventoryDestination.Storage.route) {
-            val viewModel = koinViewModel<StorageLocationViewModel>()
-            StorageLocationListScreen(
+            val viewModel = koinViewModel<StorageLocationsViewModel>()
+            StorageLocationsScreen(
                 navController = navController,
                 viewModel = viewModel,
                 modifier = modifier.padding(dimensionResource(R.dimen.spacing_normal))

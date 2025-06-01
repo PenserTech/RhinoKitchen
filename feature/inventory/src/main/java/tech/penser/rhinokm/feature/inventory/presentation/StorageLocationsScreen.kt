@@ -29,9 +29,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -40,9 +44,9 @@ import kotlin.uuid.ExperimentalUuidApi
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalUuidApi::class)
 @Composable
-fun StorageLocationListScreen(
+fun StorageLocationsScreen(
     navController: NavController,
-    viewModel: StorageLocationViewModel,
+    viewModel: StorageLocationsViewModel,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -72,11 +76,15 @@ fun StorageLocationListScreen(
                 .fillMaxSize()
         ) {
             LazyColumn(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
+                    .testTag("locations_list"),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(viewModel.locations) { (id, name, abbr) ->
+                items(
+                    items = viewModel.locations,
+                    key = { location -> location.id }
+                ) { (id, name, abbr) ->
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
