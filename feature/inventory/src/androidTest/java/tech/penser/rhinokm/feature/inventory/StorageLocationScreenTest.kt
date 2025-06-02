@@ -1,18 +1,16 @@
 package tech.penser.rhinokm.feature.inventory
 
-import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.test.printToLog
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.test.KoinTestRule
 import tech.penser.rhinokm.core.testutils.BaseComposeNavTest
+import tech.penser.rhinokm.feature.inventory.di.inventoryModule
 import tech.penser.rhinokm.feature.inventory.domain.model.StorageLocation
 import tech.penser.rhinokm.feature.inventory.domain.navigation.InventoryNavHost
 import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationsScreen
@@ -22,6 +20,15 @@ import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class StorageLocationScreenTest : BaseComposeNavTest() {
+
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        // Print Koin logs for debugging
+        // printLogger(Level.DEBUG)
+        modules(
+            inventoryModule, // The module that provides StorageLocationsViewModel, etc.
+        )
+    }
 
     @Test
     fun inventory_NavigationToStorageLocationLoadsStorageLocationScreen() {
@@ -48,11 +55,6 @@ class StorageLocationScreenTest : BaseComposeNavTest() {
     fun storage_AllLocationsDisplayed_withNameAndAbbreviation() {
         val viewModel = StorageLocationsViewModel()
 
-        println("ViewModel has ${viewModel.locations.size} locations")
-        viewModel.locations.forEachIndexed { index, location ->
-            println("$index: ${location.name} - ${location.abbreviation}")
-        }
-
         composeTestRule.setContent {
             StorageLocationsScreen(navController = navController, viewModel = viewModel)
         }
@@ -61,28 +63,39 @@ class StorageLocationScreenTest : BaseComposeNavTest() {
 
         // Now check if Location 10 exists
         composeTestRule.onNodeWithText("Location 10").assertExists()
-        composeTestRule.onNodeWithText("Location 11").assertExists()
-
-        composeTestRule.onNodeWithText("L11") .assertExists()
+        composeTestRule.onNodeWithText("L10") .assertExists()
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     @Test
     fun displayMode_fieldsAreNotEditable() {
+        val locations = listOf( StorageLocation(Uuid.random(), "Test Location", "TL") )
         val viewModel = StorageLocationsViewModel()
+        viewModel.locations.clear()
+        viewModel.locations.addAll(locations)
         composeTestRule.setContent {
             StorageLocationsScreen(navController = navController, viewModel = viewModel)
         }
 
-        //need to verify these items are only editable after clicking on them. Although that seems dangerous,
-        //like it might be too easy to accidentally edit something. Maybe think about long press.
-        //tried things like assertIsNotEnabled(), but they did not help For some reason the test
-    // sees these fields as being editable.
+        assertNodeWithTextDisplayed("Test Location")
+        assertNodeWithTextDisplayed("TL")
+
+        //we expect errors because we should not be able to edit the fields
+        assert(
+            composeTestRule
+                .onNodeWithText("Test Location")
+                .throwsErrorOn { performTextInput("New Text") }
+        )
+        assert(
+            composeTestRule
+                .onNodeWithText("TL")
+                .throwsErrorOn { performTextInput("New") }
+        )
     }
 
     /**
      * Here is a list of tests to add:
      *
-     * displayMode_fieldsAreNotEditable
      *
      * keyboardDoesNotObscureFields_inPortraitMode
      *

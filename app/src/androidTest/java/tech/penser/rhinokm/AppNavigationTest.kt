@@ -136,7 +136,7 @@ class AppNavigationTest : BaseComposeNavTest() {
         // Debug: Print what's displayed after clicking Storage
         composeTestRule.onRoot().printToLog("AFTER_STORAGE_CLICK")
 
-        assertNodeWithTextDisplayed("Mock Storage Location List Screen")
+        assertNodeWithTextDisplayed("Storage Locations")
         
         // Leave inventory - go to Orders
         clickNodeWithText("Orders")
@@ -148,7 +148,7 @@ class AppNavigationTest : BaseComposeNavTest() {
         // Debug: Print what's displayed when returning to inventory
         composeTestRule.onRoot().printToLog("RETURN_TO_INVENTORY")
 
-        assertNodeWithTextDisplayed("Mock Storage Location List Screen")
+        assertNodeWithTextDisplayed("Location 1")
         
         // Verify we're NOT on the landing screen
         composeTestRule.onNodeWithText("Start New Inventory", useUnmergedTree = true).assertDoesNotExist()

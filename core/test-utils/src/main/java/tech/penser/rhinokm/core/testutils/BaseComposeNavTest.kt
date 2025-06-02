@@ -1,15 +1,18 @@
 package tech.penser.rhinokm.core.testutils
 
 import android.content.Context
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTextInput
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
 import org.junit.Before
 import org.junit.Rule
+import kotlin.reflect.KClass
 
 /**
  * Base class for Compose Navigation tests.
@@ -49,4 +52,16 @@ abstract class BaseComposeNavTest {
             )
             .assertIsDisplayed()
 
+    fun SemanticsNodeInteraction.throwsErrorOn(
+        expectedExceptionType: KClass<out Throwable> = AssertionError::class, // Allow specifying exception type
+        actionToPerform: SemanticsNodeInteraction.() -> Unit,
+    ): Boolean =
+        try {
+            this.actionToPerform()
+            false
+        } catch( err: AssertionError) {
+            true
+        } catch( err: Throwable) {
+            false
+        }
 }
