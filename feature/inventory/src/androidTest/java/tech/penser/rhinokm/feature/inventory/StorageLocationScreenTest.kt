@@ -1,7 +1,12 @@
 package tech.penser.rhinokm.feature.inventory
 
+import androidx.compose.ui.test.hasAnyChild
+import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.hasParent
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -93,9 +98,40 @@ class StorageLocationScreenTest : BaseComposeNavTest() {
         )
     }
 
+    @OptIn(ExperimentalUuidApi::class)
+    @Test
+    fun editMode_fieldsAreEditable() {
+        val locations = listOf( StorageLocation(Uuid.random(), "Test Location", "TL") )
+        val viewModel = StorageLocationsViewModel()
+        viewModel.locations.clear()
+        viewModel.locations.addAll(locations)
+
+
+        composeTestRule.setContent {
+            StorageLocationsScreen(navController = navController, viewModel = viewModel)
+        }
+
+        assertNodeWithTextDisplayed("Test Location")
+        assertNodeWithTextDisplayed("TL")
+
+        // we need a way to set this to edit mode, so we find
+        // the card we need by looking for a text field with the value
+        // we want to edit and then looking for the edit button.
+        composeTestRule.onNode(
+            hasParent(hasAnyChild(hasText("Test Location")))
+                    and hasContentDescription("Edit location")
+        ).performClick()
+
+        //we expect errors because we should not be able to edit the fields
+        composeTestRule.onNodeWithText("Test Location").performTextInput("New Text")
+        composeTestRule.onNodeWithText("TL").performTextInput("TL")
+    }
+
     /**
      * Here is a list of tests to add:
      *
+     * editing a location and clicking save, saves the update
+     * editing a location and clicking cancel, does not save the update
      *
      * keyboardDoesNotObscureFields_inPortraitMode
      *

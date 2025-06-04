@@ -17,6 +17,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,18 +32,22 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import tech.penser.rhinokm.feature.inventory.R
+import tech.penser.rhinokm.feature.inventory.domain.model.StorageLocation
 import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalUuidApi::class)
 @Composable
@@ -75,8 +82,25 @@ fun StorageLocationsScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
+            var editingItemId by rememberSaveable { mutableStateOf<Uuid?>(null) }
+            var editingName by rememberSaveable { mutableStateOf("") }
+            var editingAbbr by rememberSaveable { mutableStateOf("") }
+
+            fun startEditing(location: StorageLocation) {
+                editingItemId = location.id
+                editingName = location.name
+                editingAbbr = location.abbreviation
+            }
+
+            fun cancelEditing() {
+                editingItemId = null
+                editingName = ""
+                editingAbbr = ""
+            }
+
             LazyColumn(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
                     .testTag("locations_list"),
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -84,24 +108,78 @@ fun StorageLocationsScreen(
                 items(
                     items = viewModel.locations,
                     key = { location -> location.id }
-                ) { (id, name, abbr) ->
+                ) { location ->
+                    val isEditing = editingItemId == location.id
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         shape = RoundedCornerShape(12.dp),
                         border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
 //                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerLow)
                     ) {
+                        Row {
+
                         Column(
                             modifier = Modifier
                                 .padding(horizontal = 16.dp, vertical = 12.dp)
+                                .weight(1.0f)
                         ) {
-                            Text(text = name, style = MaterialTheme.typography.titleMedium)
-                            Text(text = abbr, style = MaterialTheme.typography.bodySmall)
+                            if (isEditing) {
+                                OutlinedTextField(
+                                    value = editingName,
+                                    onValueChange = { editingName = it },
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                                OutlinedTextField(
+                                    value = editingAbbr,
+                                    onValueChange = { editingAbbr = it },
+                                    modifier = Modifier.fillMaxWidth(),
+                                )
+                            } else {
+                                Text(
+                                    text = location.name,
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = location.abbreviation,
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.spacing_large)))
+                        if (isEditing) {
+                            IconButton(onClick = { cancelEditing() }) {
+                                Icon(
+                                    Icons.Default.Close,
+                                    contentDescription = stringResource(
+                                        id = R.string.cancel_edit_storage_location
+                                    )
+                                )
+                            }
+                            IconButton(onClick = {
+                                // TODO: Save logic
+                                cancelEditing()
+                            }) {
+                                Icon(
+                                    Icons.Default.Check,
+                                    contentDescription = stringResource(
+                                        id = R.string.save_storage_location
+                                    )
+                                )
+                            }
+                        } else {
+                            IconButton(onClick = { startEditing(location) }) {
+                                Icon(Icons.Default.Edit,
+                                    contentDescription = stringResource(
+                                        id = R.string.edit_storage_location
+                                    ))
+                            }
                         }
                     }
                 }
-            }
 
+            }
+                        }
             // Add New Item Card
             Card(
                 modifier = Modifier
@@ -144,11 +222,13 @@ fun StorageLocationsScreen(
 
                     }
                     Spacer(modifier = Modifier.width(36.dp))
-                    Icon(
-                        imageVector = Icons.Default.Add,
-                        contentDescription = stringResource(id = R.string.add_new_storage_location),
-                        modifier = Modifier.size(36.dp)
-                    )
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(id = R.string.add_new_storage_location),
+                            modifier = Modifier.size(dimensionResource(R.dimen.spacing_large))
+                        )
+                    }
                 }
             }
         }

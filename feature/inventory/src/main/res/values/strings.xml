@@ -17,6 +17,9 @@
     <string name="storage_locations_new_location_name">Location name</string>
     <string name="storage_locations_new_location_abbr">Abbreviation</string>
     <string name="add_new_storage_location">Add new location</string>
+    <string name="edit_storage_location">Edit location</string>
+    <string name="cancel_edit_storage_location">Cancel</string>
+    <string name="save_storage_location">Save</string>
 
     <!-- Item List Screen -->
     <string name="item_list_screen_title">Items</string>
