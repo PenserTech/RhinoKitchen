@@ -10,18 +10,21 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTextInput
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.mockk.every
+import io.mockk.mockk
+import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTestRule
+import tech.penser.rhinokm.core.domain.model.SafeUuid
 import tech.penser.rhinokm.core.testutils.BaseComposeNavTest
 import tech.penser.rhinokm.feature.inventory.di.inventoryModule
 import tech.penser.rhinokm.feature.inventory.domain.model.StorageLocation
 import tech.penser.rhinokm.feature.inventory.domain.navigation.InventoryNavHost
+import tech.penser.rhinokm.feature.inventory.domain.repository.InventoryRepository
 import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationsScreen
 import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationsViewModel
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
 @RunWith(AndroidJUnit4::class)
 class StorageLocationScreenTest : BaseComposeNavTest() {
@@ -48,36 +51,54 @@ class StorageLocationScreenTest : BaseComposeNavTest() {
 
     @Test
     fun store_CanAddNewStorageLocationWithValidInformation() {
+
+        val mockRepository = mockk<InventoryRepository>()
+
+        every {mockRepository.getAllStorageLocations() }
+            .returns(flowOf(emptyList()))
+
+        val viewModel = StorageLocationsViewModel(mockRepository)
+
         composeTestRule.setContent {
-            StorageLocationsScreen(navController = navController, viewModel = StorageLocationsViewModel())
+            StorageLocationsScreen(
+                navController = navController,
+                viewModel = viewModel
+            )
         }
 
         assertNodeWithTextDisplayed("Location name") // this  hint text for the first field we want
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     @Test
     fun storage_AllLocationsDisplayed_withNameAndAbbreviation() {
-        val viewModel = StorageLocationsViewModel()
+        val mockRepository = mockk<InventoryRepository>()
+
+        every { mockRepository.getAllStorageLocations() }
+            .returns(flowOf(locations))
+
+        val viewModel = StorageLocationsViewModel(mockRepository)
 
         composeTestRule.setContent {
             StorageLocationsScreen(navController = navController, viewModel = viewModel)
         }
         // Scroll the list to the bottom to load all items
-        composeTestRule.onNodeWithTag("locations_list").performScrollToIndex(9)
+        composeTestRule.onNodeWithTag("locations_list").performScrollToIndex(locations.size - 1)
 
         // Now check if Location 10 exists
-        composeTestRule.onNodeWithText("Location 10").assertExists()
-        composeTestRule.onNodeWithText("L10") .assertExists()
+        composeTestRule.onNodeWithText("Location 7").assertExists()
+        composeTestRule.onNodeWithText("L7") .assertExists()
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     @Test
     fun displayMode_fieldsAreNotEditable() {
-        val locations = listOf( StorageLocation(Uuid.random(), "Test Location", "TL") )
-        val viewModel = StorageLocationsViewModel()
-        viewModel.locations.clear()
-        viewModel.locations.addAll(locations)
+        val locations = listOf( StorageLocation(SafeUuid.random(), "Test Location", "TL") )
+        val mockRepository = mockk<InventoryRepository>()
+
+        every { mockRepository.getAllStorageLocations() }
+            .returns(flowOf(locations))
+
+        val viewModel = StorageLocationsViewModel(mockRepository)
+
         composeTestRule.setContent {
             StorageLocationsScreen(navController = navController, viewModel = viewModel)
         }
@@ -98,14 +119,16 @@ class StorageLocationScreenTest : BaseComposeNavTest() {
         )
     }
 
-    @OptIn(ExperimentalUuidApi::class)
     @Test
     fun editMode_fieldsAreEditable() {
-        val locations = listOf( StorageLocation(Uuid.random(), "Test Location", "TL") )
-        val viewModel = StorageLocationsViewModel()
-        viewModel.locations.clear()
-        viewModel.locations.addAll(locations)
+        val locations = listOf( StorageLocation(SafeUuid.random(), "Test Location", "TL") )
 
+        val mockRepository = mockk<InventoryRepository>()
+
+        every { mockRepository.getAllStorageLocations() }
+            .returns(flowOf(locations))
+
+        val viewModel = StorageLocationsViewModel(mockRepository)
 
         composeTestRule.setContent {
             StorageLocationsScreen(navController = navController, viewModel = viewModel)
@@ -140,14 +163,13 @@ class StorageLocationScreenTest : BaseComposeNavTest() {
      * inputInAddNewRow_survivesOrientationChange
      */
 
-    @OptIn(ExperimentalUuidApi::class)
     val locations = listOf(
-        StorageLocation(Uuid.random(), "Location 1", "L1"),
-        StorageLocation(Uuid.random(), "Location 2", "L2"),
-        StorageLocation(Uuid.random(), "Location 4", "L3"),
-        StorageLocation(Uuid.random(), "Location 3", "L4"),
-        StorageLocation(Uuid.random(), "Location 5", "L5"),
-        StorageLocation(Uuid.random(), "Location 6", "L6"),
-        StorageLocation(Uuid.random(), "Location 7", "L7"),
+        StorageLocation(SafeUuid.random(), "Location 1", "L1"),
+        StorageLocation(SafeUuid.random(), "Location 2", "L2"),
+        StorageLocation(SafeUuid.random(), "Location 4", "L3"),
+        StorageLocation(SafeUuid.random(), "Location 3", "L4"),
+        StorageLocation(SafeUuid.random(), "Location 5", "L5"),
+        StorageLocation(SafeUuid.random(), "Location 6", "L6"),
+        StorageLocation(SafeUuid.random(), "Location 7", "L7"),
     )
 }

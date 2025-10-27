@@ -32,6 +32,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -44,18 +45,19 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import tech.penser.rhinokm.core.domain.model.SafeUuid
 import tech.penser.rhinokm.feature.inventory.R
 import tech.penser.rhinokm.feature.inventory.domain.model.StorageLocation
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalUuidApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StorageLocationsScreen(
     navController: NavController,
     viewModel: StorageLocationsViewModel,
     modifier: Modifier = Modifier
 ) {
+    val locations by viewModel.locations.collectAsState()
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
@@ -82,7 +84,7 @@ fun StorageLocationsScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
         ) {
-            var editingItemId by rememberSaveable { mutableStateOf<Uuid?>(null) }
+            var editingItemId by rememberSaveable { mutableStateOf<SafeUuid?>(null) }
             var editingName by rememberSaveable { mutableStateOf("") }
             var editingAbbr by rememberSaveable { mutableStateOf("") }
 
@@ -106,7 +108,7 @@ fun StorageLocationsScreen(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 items(
-                    items = viewModel.locations,
+                    items = locations,
                     key = { location -> location.id }
                 ) { location ->
                     val isEditing = editingItemId == location.id
