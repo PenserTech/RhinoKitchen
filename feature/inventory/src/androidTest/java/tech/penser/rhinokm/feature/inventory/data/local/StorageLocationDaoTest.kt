@@ -18,10 +18,7 @@ import tech.penser.rhinokm.feature.inventory.data.local.model.StorageLocationEnt
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
-@ExperimentalUuidApi
 @RunWith(AndroidJUnit4::class)
 @SmallTest
 class StorageLocationDaoTest {
@@ -33,7 +30,6 @@ class StorageLocationDaoTest {
     private lateinit var dao: StorageLocationDao
 
     @Before
-
     fun setup() {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
