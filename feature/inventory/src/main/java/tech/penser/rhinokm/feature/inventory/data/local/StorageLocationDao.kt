@@ -19,7 +19,7 @@ interface StorageLocationDao {
     suspend fun insert(location: StorageLocationEntity)
 
     @Update
-    suspend fun update(location: StorageLocationEntity)
+    suspend fun update(location: StorageLocationEntity): Int
 
     @Query("DELETE FROM storage_locations WHERE id = :id")
     suspend fun delete(id: SafeUuid)

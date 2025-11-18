@@ -1,18 +1,22 @@
 package tech.penser.rhinokm.feature.inventory.data.repository
 
+import StorageLocationDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import tech.penser.rhinokm.core.domain.model.SafeUuid
+import tech.penser.rhinokm.feature.inventory.data.local.MeasurementUnitDao
+import tech.penser.rhinokm.feature.inventory.data.local.model.toDomain
+import tech.penser.rhinokm.feature.inventory.data.local.model.toEntity
 import tech.penser.rhinokm.feature.inventory.domain.model.InventoryItem
 import tech.penser.rhinokm.feature.inventory.domain.model.StorageLocation
 import tech.penser.rhinokm.feature.inventory.domain.repository.InventoryRepository
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
 
-class InventoryRepositoryImpl : InventoryRepository {
+class InventoryRepositoryImpl(
+    private val storageLocationDao: StorageLocationDao,
+    private val measurementUnitDao: MeasurementUnitDao,
+) : InventoryRepository {
 
-    private val _locations = MutableStateFlow<List<StorageLocation>>(emptyList())
     override fun getAllInventoryItems(): Flow<List<InventoryItem>> {
         TODO("Not yet implemented")
     }
@@ -21,11 +25,11 @@ class InventoryRepositoryImpl : InventoryRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun addInventoryItem(location: InventoryItem) {
+    override suspend fun addInventoryItem(item: InventoryItem) {
         TODO("Not yet implemented")
     }
 
-    override suspend fun updateInventoryItem(location: InventoryItem) {
+    override suspend fun updateInventoryItem(item: InventoryItem) {
         TODO("Not yet implemented")
     }
 
@@ -33,23 +37,27 @@ class InventoryRepositoryImpl : InventoryRepository {
         TODO("Not yet implemented")
     }
 
-    override fun getAllStorageLocations(): Flow<List<StorageLocation>> = _locations.asStateFlow()
+    override fun getAllStorageLocations(): Flow<List<StorageLocation>> =
+        storageLocationDao.getAll().map {  entities ->
+            entities.map { it.toDomain() }
+        }
 
-    override suspend fun getStorageLocationById(id: SafeUuid): StorageLocation? {
-        return _locations.value.find { it.id == id }
-    }
+    override suspend fun getStorageLocationById(id: SafeUuid): StorageLocation? =
+        storageLocationDao.getById(id)?.toDomain()
 
-    override suspend fun addStorageLocation(location: StorageLocation) {
-        _locations.value = _locations.value + location
-    }
+
+    override suspend fun addStorageLocation(location: StorageLocation) =
+        storageLocationDao.insert(location.toEntity())
+
 
     override suspend fun updateStorageLocation(location: StorageLocation) {
-        _locations.value = _locations.value.map { 
-            if (it.id == location.id) location else it
+        // when update returns 0, it means the item does not exist, so insert it
+        if (storageLocationDao.update(location.toEntity()) == 0) {
+            storageLocationDao.insert(location.toEntity())
         }
     }
 
     override suspend fun deleteStorageLocation(id: SafeUuid) {
-        _locations.value = _locations.value.filter { it.id != id }
+        storageLocationDao.delete(id)
     }
 }

@@ -47,4 +47,7 @@ dependencies {
     implementation(libs.androidx.navigation.testing)
     implementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
 }

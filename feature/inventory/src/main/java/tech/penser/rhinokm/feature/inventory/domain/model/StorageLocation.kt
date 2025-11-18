@@ -5,7 +5,7 @@ import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 
 data class StorageLocation (
-    val id: SafeUuid,
+    val id: SafeUuid = SafeUuid.random(),
     val name: String,
     val abbreviation: String
 )

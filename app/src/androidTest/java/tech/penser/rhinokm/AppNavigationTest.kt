@@ -148,7 +148,7 @@ class AppNavigationTest : BaseComposeNavTest() {
         // Debug: Print what's displayed when returning to inventory
         composeTestRule.onRoot().printToLog("RETURN_TO_INVENTORY")
 
-        assertNodeWithTextDisplayed("Location 1")
+        assertNodeWithTextDisplayed("Storage Locations")
         
         // Verify we're NOT on the landing screen
         composeTestRule.onNodeWithText("Start New Inventory", useUnmergedTree = true).assertDoesNotExist()

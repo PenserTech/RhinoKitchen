@@ -1,10 +1,15 @@
 package tech.penser.rhinokm.feature.inventory
 
+import androidx.compose.ui.res.stringResource
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.dsl.module
 import tech.penser.rhinokm.feature.inventory.domain.navigation.InventoryNavHost
 import tech.penser.rhinokm.core.testutils.BaseComposeNavTest
+import tech.penser.rhinokm.core.testutils.KoinTestRule
+import tech.penser.rhinokm.feature.inventory.di.inventoryModule
 
 /**
  * UI tests for the inventory navigation flow.
@@ -15,7 +20,17 @@ import tech.penser.rhinokm.core.testutils.BaseComposeNavTest
  */
 @RunWith(AndroidJUnit4::class)
 class InventoryNavigationTest: BaseComposeNavTest() {
-    
+
+    @get:Rule
+    val koinTestRule = KoinTestRule(
+        modules = listOf(
+            inventoryModule,
+            module {
+                single { navController }
+            }
+        )
+    )
+
     @Test
     fun inventoryNavigation_landingScreenDisplaysCorrectly() {
         composeTestRule.setContent {
@@ -41,7 +56,7 @@ class InventoryNavigationTest: BaseComposeNavTest() {
         clickNodeWithText("Storage")
         
         // Verify we're on the storage screen
-        assertNodeWithTextDisplayed("Mock Storage Location List Screen")
+        assertNodeWithTextDisplayed("Storage Locations")
     }
     
     @Test

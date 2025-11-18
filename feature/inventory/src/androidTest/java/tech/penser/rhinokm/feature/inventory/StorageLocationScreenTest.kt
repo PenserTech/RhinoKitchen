@@ -16,9 +16,9 @@ import kotlinx.coroutines.flow.flowOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.test.KoinTestRule
 import tech.penser.rhinokm.core.domain.model.SafeUuid
 import tech.penser.rhinokm.core.testutils.BaseComposeNavTest
+import tech.penser.rhinokm.core.testutils.KoinTestRule
 import tech.penser.rhinokm.feature.inventory.di.inventoryModule
 import tech.penser.rhinokm.feature.inventory.domain.model.StorageLocation
 import tech.penser.rhinokm.feature.inventory.domain.navigation.InventoryNavHost
@@ -30,13 +30,11 @@ import tech.penser.rhinokm.feature.inventory.presentation.StorageLocationsViewMo
 class StorageLocationScreenTest : BaseComposeNavTest() {
 
     @get:Rule
-    val koinTestRule = KoinTestRule.create {
-        // Print Koin logs for debugging
-        // printLogger(Level.DEBUG)
-        modules(
-            inventoryModule, // The module that provides StorageLocationsViewModel, etc.
+    val koinTestRule = KoinTestRule(
+        modules = listOf(
+            inventoryModule
         )
-    }
+    )
 
     @Test
     fun inventory_NavigationToStorageLocationLoadsStorageLocationScreen() {

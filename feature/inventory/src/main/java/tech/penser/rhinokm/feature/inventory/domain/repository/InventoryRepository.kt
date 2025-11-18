@@ -11,9 +11,9 @@ interface InventoryRepository {
 
     suspend fun getInventoryItemById(id: SafeUuid): InventoryItem?
 
-    suspend fun addInventoryItem(location: InventoryItem)
+    suspend fun addInventoryItem(item: InventoryItem)
 
-    suspend fun updateInventoryItem(location: InventoryItem)
+    suspend fun updateInventoryItem(item: InventoryItem)
 
     suspend fun deleteInventoryItem(id: SafeUuid)
 
