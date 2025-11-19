@@ -1,10 +1,9 @@
 package tech.penser.rhinokm.feature.inventory.domain.model
 
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
+import tech.penser.rhinokm.core.domain.model.SafeUuid
 
-data class MeasurementUnit @OptIn(ExperimentalUuidApi::class) constructor(
-    val id: Uuid,
+data class MeasurementUnit (
+    val id: SafeUuid = SafeUuid.random(),
     val name: String,
     val abbreviation: String
 )

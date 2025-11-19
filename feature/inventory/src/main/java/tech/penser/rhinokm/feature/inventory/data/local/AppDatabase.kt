@@ -2,7 +2,6 @@
 
 package tech.penser.rhinokm.feature.inventory.data.local
 
-import StorageLocationDao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters

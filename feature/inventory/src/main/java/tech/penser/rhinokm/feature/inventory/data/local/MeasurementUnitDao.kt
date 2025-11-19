@@ -22,7 +22,7 @@ interface MeasurementUnitDao {
     suspend fun insert(unit: MeasurementUnitEntity)
 
     @Update
-    suspend fun update(unit: MeasurementUnitEntity)
+    suspend fun update(unit: MeasurementUnitEntity): Int
 
     @Query("DELETE FROM measurement_units WHERE id = :id")
     suspend fun delete(id: SafeUuid)

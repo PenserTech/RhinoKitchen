@@ -1,9 +1,9 @@
 package tech.penser.rhinokm.feature.inventory.domain.repository
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asStateFlow
 import tech.penser.rhinokm.core.domain.model.SafeUuid
 import tech.penser.rhinokm.feature.inventory.domain.model.InventoryItem
+import tech.penser.rhinokm.feature.inventory.domain.model.MeasurementUnit
 import tech.penser.rhinokm.feature.inventory.domain.model.StorageLocation
 
 interface InventoryRepository {
@@ -26,4 +26,14 @@ interface InventoryRepository {
     suspend fun updateStorageLocation(location: StorageLocation)
 
     suspend fun deleteStorageLocation(id: SafeUuid)
+
+    fun getAllMeasurementUnits(): Flow<List<MeasurementUnit>>
+
+    suspend fun getMeasurementUnitById(id: SafeUuid): MeasurementUnit?
+
+    suspend fun addMeasurementUnit(unit: MeasurementUnit)
+
+    suspend fun updateMeasurementUnit(unit: MeasurementUnit)
+
+    suspend fun deleteMeasurementUnit(id: SafeUuid)
 }

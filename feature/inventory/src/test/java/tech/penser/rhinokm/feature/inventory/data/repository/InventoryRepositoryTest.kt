@@ -1,6 +1,6 @@
 package tech.penser.rhinokm.feature.inventory.data.repository
 
-import StorageLocationDao
+import tech.penser.rhinokm.feature.inventory.data.local.StorageLocationDao
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -13,14 +13,14 @@ import org.junit.Before
 import org.junit.Test
 import tech.penser.rhinokm.core.domain.model.SafeUuid
 import tech.penser.rhinokm.feature.inventory.data.local.MeasurementUnitDao
+import tech.penser.rhinokm.feature.inventory.data.local.model.MeasurementUnitEntity
 import tech.penser.rhinokm.feature.inventory.data.local.model.StorageLocationEntity
 import tech.penser.rhinokm.feature.inventory.data.local.model.toDomain
 import tech.penser.rhinokm.feature.inventory.data.local.model.toEntity
+import tech.penser.rhinokm.feature.inventory.domain.model.MeasurementUnit
 import tech.penser.rhinokm.feature.inventory.domain.model.StorageLocation
 import tech.penser.rhinokm.feature.inventory.domain.repository.InventoryRepository
 import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
 
 class InventoryRepositoryTest {
 
@@ -147,7 +147,6 @@ class InventoryRepositoryTest {
     fun `deleteStorageLocation removes the item from data storage`() = runTest {
         // Given
         val toDelete = StorageLocation(name = "Walk-In Fridge", abbreviation = "WF")
-        val entity = toDelete.toEntity()
         coEvery { storageLocationDao.delete(any()) } returns Unit
 
         // When
@@ -157,5 +156,114 @@ class InventoryRepositoryTest {
         // Then
         // Verify delete called exactly once with expected Entity
         coVerify(exactly = 1) { storageLocationDao.delete(toDelete.id) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `getAllMeasurementUnits returns mapped domain objects from DAO`() = runTest {
+        // Given
+        val unit1 = MeasurementUnitEntity(name = "Kilogram", abbreviation = "KG")
+        val unit2 = MeasurementUnitEntity(name = "Litre", abbreviation = "L")
+        val unit3 = MeasurementUnitEntity(name = "Carton", abbreviation = "CRT")
+
+        val entities = listOf(unit1, unit2, unit3)
+
+        coEvery { measurementUnitDao.getAll() } returns flowOf(entities)
+
+        // When
+        val results = inventoryRepository.getAllMeasurementUnits().first()
+
+        // Then
+        val expected = entities.map { it.toDomain() }
+        assertEquals(expected, results)
+    }
+
+    @Test
+    fun `getMeasurementUnitById returns mapped domain object from DAO` () = runTest {
+        // Given
+        val id = SafeUuid.random()
+        val entity = MeasurementUnitEntity(name = "Kilogram", abbreviation = "KG")
+
+        coEvery { measurementUnitDao.getById(id) } returns entity
+
+        // When
+        val result = inventoryRepository.getMeasurementUnitById(id)
+
+        // Then
+        assertEquals(entity.toDomain(), result)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `addMeasurementUnit adds unit to repository`() = runTest {
+        // Given
+        val unit = MeasurementUnit(name = "Kilogram", abbreviation = "KG")
+        val expectedEntity = unit.toEntity()
+        coEvery { measurementUnitDao.insert(expectedEntity) } returns Unit
+
+        // When
+        inventoryRepository.addMeasurementUnit(unit)
+        advanceUntilIdle()
+
+        // Then
+        // Verify insert called exactly once with expected Entity
+        coVerify(exactly = 1) { measurementUnitDao.insert(expectedEntity) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `updateMeasurementUnit updates existing unit in repository`() = runTest {
+        // Given
+        val existing = MeasurementUnit(name = "Kilogram", abbreviation = "KG")
+        val entity = existing.toEntity()
+        coEvery { measurementUnitDao.update(entity) } returns 1
+
+        // When
+        inventoryRepository.updateMeasurementUnit(existing)
+        advanceUntilIdle()
+
+        // Then
+        // Verify update called exactly once with expected Entity
+        coVerify(exactly = 1) { measurementUnitDao.update(entity) }
+        // Verify insert is not called
+        coVerify(exactly = 0) { measurementUnitDao.insert(any()) }
+
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `updateMeasurementUnit inserts non-existent unit in repository`() = runTest {
+        // Given
+        val existing = MeasurementUnit(name = "Kilogram", abbreviation = "KG")
+        val entity = existing.toEntity()
+        coEvery { measurementUnitDao.update(entity) } returns 0
+        coEvery { measurementUnitDao.insert(entity) } returns Unit
+
+        // When
+        inventoryRepository.updateMeasurementUnit(existing)
+        advanceUntilIdle()
+
+        // Then
+        // Verify update called exactly once with expected Entity
+        coVerify(exactly = 1) { measurementUnitDao.update(entity) }
+        // Verify insert is not called
+        coVerify(exactly = 1) { measurementUnitDao.insert(any()) }
+
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `deleteMeasurementUnit removes the item from data storage`() = runTest {
+        // Given
+        val toDelete = MeasurementUnit(name = "Kilogram", abbreviation = "KG")
+        coEvery { measurementUnitDao.delete(any()) } returns Unit
+
+        // When
+        inventoryRepository.deleteMeasurementUnit(toDelete.id)
+        advanceUntilIdle()
+
+        // Then
+        // Verify delete called exactly once with expected Entity
+        coVerify(exactly = 1) { measurementUnitDao.delete(toDelete.id) }
     }
 }
